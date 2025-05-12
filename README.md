@@ -1,81 +1,87 @@
-# Brick Knowledge Graph Builder
+# Brick Conservation Knowledge Graph
 
-## Description
+## Project Overview
+This project implements a knowledge graph for historical brick conservation literature, designed to organize, connect, and make searchable complex information about traditional brick-making techniques and conservation practices across India. Using Neo4j as the graph database, it transforms unstructured text from authoritative sources into a structured, queryable knowledge base.
 
-This project builds a Neo4j knowledge graph focused on the topic of "Bricks". It extracts information from specific textual sources related to brick history, materials, construction techniques, and conservation practices, structuring this data into a graph database.
+## Key Features
+- **Hierarchical Organization**: Content structured as Topic → Book → Chapter → Section → Subsection → Subsubsection
+- **Relationship Mapping**: Explicit connections between related concepts (e.g., citation relationships)
+- **Multi-source Integration**: Combines information from multiple sources (Satish Chandra's historical text and Tata Trust's conservation specifications)
+- **Extensible Framework**: Can be expanded with additional sources or embedding capabilities
 
-## Features
+## Knowledge Graph Structure
 
-*   Connects to a Neo4j database.
-*   Creates a central "Topic" node (e.g., "BRICKS").
-*   Parses information from different sources (`satish_chandra.py`, `tatatrust.py`) representing books or documents.
-*   Creates nodes for Books, Chapters, Sections, Subsections, and References.
-*   Establishes relationships between these nodes (e.g., `HAS_BOOK`, `HAS_CHAPTER`, `HAS_SECTION`, `HAS_SUBSECTION`, `CITES`) to represent the structure and connections within the knowledge domain.
+### Node Types
+- **Topic**: Root-level domain (e.g., "BRICKS")
+- **Book**: Literary sources containing brick-related information
+- **Chapter**: Major divisions within books
+- **Section**: Sub-divisions of chapters
+- **Subsection**: Detailed content areas
+- **Subsubsection**: Specific techniques or concepts
+- **Reference**: Citations and bibliographic information
+
+### Relationship Types
+- **HAS_BOOK**: Connects Topic to Books
+- **HAS_CHAPTER**: Connects Books to Chapters
+- **HAS_SECTION**: Connects Chapters to Sections
+- **HAS_SUBSECTION**: Connects Sections to Subsections
+- **HAS_SUBSUBSECTION**: Connects Subsections to Subsubsections
+- **CITES**: Connects content nodes to Reference nodes
+
+## Technical Implementation
+
+### Architecture
+The project follows a modular design with separate components:
+- Core graph database connector (`knowledge_graph.py`)
+- Content modules (`satish_chandra.py`, `tatatrust.py`)
+- Main script (`main.py`) that orchestrates graph creation
+
+### Data Sources
+1. **Historical Text**: "History of Architecture and Ancient Building Materials in India" by Satish Chandra
+   - Contains historical context of brick usage in ancient India
+   - Details traditional manufacturing techniques
+   - Provides archaeological evidence from sites like Mohenjo-Daro and Dholavira
+
+2. **Conservation Manual**: "Tata Trust Specifications for Built Heritage Conservation"
+   - Modern conservation techniques for historic brick structures
+   - Material specifications and handling instructions
+   - Step-by-step repair methods for various brick defects
 
 ## Prerequisites
+- Python 3.7+
+- Neo4j Graph Database (local or cloud instance)
+- Neo4j Python driver (`pip install neo4j`)
 
-*   Python 3.x
-*   pip (Python package installer)
-*   A running Neo4j instance (Server or Desktop).
-
-## Installation
-
-1.  **Clone the repository (if applicable) or ensure you have the project files.**
-2.  **Navigate to the project directory:**
-    ```bash
-    cd "Knowledge-graph-rag"
-    ```
-3.  **Install the required Python packages:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Configuration
-
-1.  Open the `main.py` file.
-2.  Update the Neo4j connection details if they differ from the defaults:
-    *   `uri`: Your Neo4j Bolt URI (e.g., `"bolt://localhost:7687"`)
-    *   `user`: Your Neo4j username (e.g., `"neo4j"`)
-    *   `password`: Your Neo4j password.
+## Setup and Installation
+1. Clone the repository
+2. Install dependencies: `pip install neo4j`
+3. Configure Neo4j connection in `main.py`:
+   ```python
+   uri = "bolt://localhost:7687"  # Update if using cloud instance
+   user = "neo4j"                 # Your Neo4j username
+   password = "your_password"     # Your Neo4j password
+   ```
 
 ## Usage
-
-1.  **Ensure your Neo4j server is running.**
-2.  **Run the main script from the project directory:**
-    ```bash
-    python main.py
-    ```
-    This will connect to the Neo4j database and populate it with the nodes and relationships defined in the `satish_chandra.py` and `tatatrust.py` modules.
-
-## Project Structure
-
-```
-.
-├── main.py             # Main script to run the knowledge graph creation process.
-├── knowledge_graph.py  # Class definition for interacting with the Neo4j database.
-├── satish_chandra.py   # Module to extract and structure data from the first source.
-├── tatatrust.py        # Module to extract and structure data from the second source.
-└── requirements.txt    # List of Python dependencies.
+```bash
+cd Brick/kg_code
+python main.py
 ```
 
-## Knowledge Graph Schema
+## Potential Extensions
+- **Semantic Search**: Add vector embeddings for content-based similarity search
+- **Question Answering**: Build RAG (Retrieval Augmented Generation) applications on top of the graph
+- **Interactive Visualization**: Develop a front-end to navigate the knowledge graph
+- **Additional Sources**: Incorporate more texts on brick conservation from different regions
 
-The script creates the following node labels and relationship types:
+## Application Areas
+- Heritage conservation planning
+- Training conservationists and architects
+- Documentation of traditional techniques
+- Supporting restoration projects with historical context
 
-*   **Nodes:**
-    *   `Topic`: Represents the main subject (e.g., "BRICKS").
-    *   `Book`: Represents a source document.
-    *   `Chapter`: Represents a chapter within a book.
-    *   `Section`: Represents a section within a chapter.
-    *   `Subsection`: Represents a subsection within a section.
-    *   `Subsubsection`: Represents a subsubsection within a subsection.
-    *   `Reference`: Represents a cited reference.
-*   **Relationships:**
-    *   `HAS_BOOK`: Connects a `Topic` to a `Book`.
-    *   `HAS_CHAPTER`: Connects a `Book` to a `Chapter`.
-    *   `HAS_SECTION`: Connects a `Chapter` to a `Section`.
-    *   `HAS_SUBSECTION`: Connects a `Section` to a `Subsection`.
-    *   `HAS_SUBSUBSECTION`: Connects a `Subsection` to a `Subsubsection`.
-    *   `CITES`: Connects a `Section` (or other content node) to a `Reference`.
 
-You can explore the generated graph using the Neo4j Browser or Bloom.
+
+
+
+
